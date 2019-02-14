@@ -86,7 +86,6 @@ if (message.content.startsWith("t!profile")) { // الامر
 
     setTimeout(function() {
       fs.readFile(__dirname + '/images_profile/diamond_prof_bg.png', function(err, picture) {
-        if (err) throw err
         var img = new Image
         img.onload = () => {
           ctx.drawImage(img, -1, -1, 0, 0)
