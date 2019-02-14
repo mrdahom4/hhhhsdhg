@@ -45,7 +45,7 @@ if (message.content.startsWith(prefix + 'credit')) {
   if(men) {
 message.channel.send(`**Your 💳 balance is: **\`$${credits}\``)
 } else {
-  message.channel.send(`**${men.username}, 💳 balance is: **\`$${credits}\``)
+  message.channel.send(`**You , 💳 balance is: **\`$${credits}\``)
 }
 }
  
