@@ -4,6 +4,7 @@ const bot = new Discord.Client({disableEveryone: true});
 const Canvas = require('canvas') 
 const fs = module.require("fs"); 
 const r1 = require('snekfetch'); 
+const prefix = '#'
 
 
 //var يعني تختصر للحاجه زي منا عامل كدة
@@ -21,148 +22,75 @@ client.on("ready", async () => { // كل حاجه هتتفح لما البوت �
     console.log(`I'm Online \n By ${copy}`) // الي هيظهر في الكونسل
     console.log(`Logged in as ${bot.user.tag}!`); // نفس الي فوق
 
-    bot.user.setGame(`${bot.users.size} users `,"http://twitch.tv/") 
+    bot.user.setGame(`${bot.users.size} users `,"http://twitch.tv/Lorans") 
     bot.user.setStatus("IdIe")
 
 }); // نهايه الكود
 
 
 
-client.on('message', message => {
+client.on("message", (message) => {
+  let men = message.mentions.users.first()
+ 
+  if (message.author.bot) return;
+    if (message.author.id === client.user.id) return;
+    if(!message.channel.guild) return;
+if (message.content.startsWith(prefix + 'credit')) {
+  if(men) {
+    if (!profile[men.id]) profile[men.id] = {
+    lastDaily:'Not Collected',
+    credits: 1,
+  };
+  }
+  if(men) {
+message.channel.send(`** ${men.username}, :credit_card: balance` + " is `"+ `${profile[men.id].credits}$` + "**")
+} else {
+  message.channel.send(`** ${message.author.username}, your :credit_card: balance` + " is `" + `${profile[message.author.id].credits}$` + "`.**")
+}
+}
+ 
+if(message.content.startsWith(prefix + "daily")) {
+  if(profile[message.author.id].lastDaily != moment().format('day')) {
+    profile[message.author.id].lastDaily = moment().format('day')
+    profile[message.author.id].credits += 200
+     message.channel.send(`**${message.author.username} you collect your \`200\` :dollar: daily pounds**`)
+} else {
+    message.channel.send(`**:stopwatch: | ${message.author.username}, your daily :yen: credits refreshes ${moment().endOf('day').fromNow()}**`)
+}
+  }
 
-if (message.content.startsWith("t!profile")) { // الامر
- let canvas = new Canvas(300, 300) //حجم الصوره الي هتظهر
- let ctx = canvas.getContext('2d')
-    let Image = Canvas.Image
-    
-   
-                      //  ava.src = buf;
-
-    fs.readFile(__dirname + '/images_profile/profile.png', function(err, picture) { //مكان الصوره 
-      var img = new Image
-        		var url = message.author.avatarURL; //افتار صورتك
-		url = url.substring(0, url.indexOf('?'));
-
-		r1.get(url).then(res => {
-			var dataURL = res.body.toString('base64');
-			dataURL = 'data:image/png;base64,' + dataURL;
-			img.onload = function() {
-
-				ctx.save();
-    		ctx.beginPath();
-    		ctx.arc(54, 103, 47, 0, Math.PI * 2, true); // احدثيات الدائره
-		    ctx.closePath();
-		    ctx.clip();
-		    ctx.drawImage(img, 8, 57, 92, 92); // الصوره
-		    ctx.restore();
-			}
-			img.src = dataURL;
-		});
-		
-      img.onload = () => {
-        ctx.drawImage(img, 1, 1, 300, 300)
-     //   ctx.drawImage(message.author.avatarURL, 152, 27, 95, 95);
-        ctx.font = "regular 11px Cairo" // نوع الخط وحجمه
-        ctx.fillStyle = "#9f9f9f" // لون الخط
-        ctx.fillText(`${message.author.username}`, 140, 137)
-        ctx.fillText(`${mo}  `, 143, 219) //money
-        ctx.fillText(`${po}`, 120, 202) // النقاط
-
-        //Level
-        ctx.font = "regular 21px Cairo"
-        ctx.fillStyle = "#ffffff"
-        ctx.fillText(`${lev}`, 47, 255) //لفل
-
-        ctx.save()
-        
-      }
-      img.src = picture
-			
-    })
-		
-   
-
-    
-
-    setTimeout(function() {
-      fs.readFile(__dirname + '/images_profile/diamond_prof_bg.png', function(err, picture) {
-        var img = new Image
-        img.onload = () => {
-          ctx.drawImage(img, -1, -1, 0, 0)
-        }
-        img.src = picture
-        let inventoryPicture = canvas.toDataURL()
-        let data = inventoryPicture.replace(/^data:image\/\w+;base64,/, "")
-        let buf = new Buffer(data, 'base64')
-      fs.writeFile(`image.png`, buf)
-      
-        message.channel.send("", {
-          file: `image.png` 
-        })
-      })
-    }, 1000)
-
-
-    function roundedImage(x, y, width, height, radius) {
-      ctx.beginPath();
-      ctx.moveTo(x + radius, y);
-      ctx.lineTo(x + width - radius, y);
-      ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-      ctx.lineTo(x + width, y + height - radius);
-      ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-      ctx.lineTo(x + radius, y + height);
-      ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-      ctx.lineTo(x, y + radius);
-      ctx.quadraticCurveTo(x, y, x + radius, y);
-      ctx.closePath();
-    }
-
-    function wrapText(context, text, x, y, maxWidth, lineHeight) {
-
-      var words = text.split(' '),
-        line = '',
-        lineCount = 0,
-        i,
-        test,
-        metrics;
-
-      for (i = 0; i < words.length; i++) {
-        test = words[i];
-        metrics = context.measureText(test);
-        while (metrics.width > maxWidth) {
-
-          test = test.substring(0, test.length - 1);
-          metrics = context.measureText(test);
-        }
-        if (words[i] != test) {
-          words.splice(i + 1, 0, words[i].substr(test.length))
-          words[i] = test;
-        }
-
-        test = line + words[i] + ' ';
-        metrics = context.measureText(test);
-
-        if (metrics.width > maxWidth && i > 0) {
-          context.fillText(line, x, y);
-          line = words[i] + ' ';
-          y += lineHeight;
-          lineCount++;
-        } else {
-          line = test;
-        }
-      }
-
-      ctx.fillText(line, x, y);
-    }
-  
-
-
-
-};
-
-
-
-
+ 
+ let cont = message.content.slice(prefix.length).split(" ");
+let args = cont.slice(1);
+let sender = message.author
+if(message.content.startsWith(prefix + 'trans')) {
+          if (!args[0]) {
+            message.channel.send(`**Usage: ${prefix}trans @someone amount**`);
+         return;
+           }
+        // We should also make sure that args[0] is a number
+        if (isNaN(args[0])) {
+            message.channel.send(`**Usage: ${prefix}trans @someone amount**`);
+            return; // Remember to return if you are sending an error message! So the rest of the code doesn't run.
+             }
+            let defineduser = '';
+            let firstMentioned = message.mentions.users.first();
+            defineduser = (firstMentioned)
+            if (!defineduser) return message.channel.send(`**Usage: ${prefix}trans @someone amount**`);
+            var mentionned = message.mentions.users.first();
+if (!profile[sender.id]) profile[sender.id] = {}
+if (!profile[sender.id].credits) profile[sender.id].credits = 200;
+fs.writeFile('profile.json', JSON.stringify(profile), (err) => {
+if (err) console.error(err);
+})
+      var mando = message.mentions.users.id;
+      if  (!profile[defineduser.id]) profile[defineduser.id] = {}
+      if (!profile[defineduser.id].credits) profile[defineduser.id].credits = 200;
+      profile[defineduser.id].credits += (+args[0]);
+      profile[sender.id].credits += (-args[0]);
+      let mariam = message.author.username
+message.channel.send(`**:moneybag: | ${message.author.username}, has transferrerd ` + "`" + args[0]+ "`" + "$" +"to " + `<@${defineduser.id}>**`)
+}
+ 
 });
-
 client.login(process.env.BOT_TOKEN);
