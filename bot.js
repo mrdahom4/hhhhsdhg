@@ -45,7 +45,7 @@ if (message.content.startsWith(prefix + 'credit')) {
   if(men) {
 message.channel.send(`**Your 💳 balance is: **\`$${credits}\``)
 } else {
-  message.channel.send(`**${user.tag} 💳 balance is: **\`$${credits}\``)
+  message.channel.send(`**${men.username}, 💳 balance is: **\`$${credits}\``)
 }
 }
  
@@ -89,7 +89,7 @@ if (err) console.error(err);
       profile[defineduser.id].credits += (+args[0]);
       profile[sender.id].credits += (-args[0]);
       let mariam = message.author.username
-message.channel.send(`${msg.author} has tranfered \`$${args[1]}\` to ${men}.`)
+message.channel.send(`${men.username}, has tranfered \`$${args[1]}\` to ${men}.`)
 }
  
 });
