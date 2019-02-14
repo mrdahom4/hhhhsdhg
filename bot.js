@@ -43,9 +43,9 @@ if (message.content.startsWith(prefix + 'credit')) {
   };
   }
   if(men) {
-message.channel.send(`** ${men.username}, :credit_card: balance` + " is `"+ `${profile[men.id].credits}$` + "**")
+message.channel.send(`**Your 💳 balance is: **\`$${credits}\``)
 } else {
-  message.channel.send(`** ${message.author.username}, your :credit_card: balance` + " is `" + `${profile[message.author.id].credits}$` + "`.**")
+  message.channel.send(`**${user.tag} 💳 balance is: **\`$${credits}\``)
 }
 }
  
@@ -89,7 +89,7 @@ if (err) console.error(err);
       profile[defineduser.id].credits += (+args[0]);
       profile[sender.id].credits += (-args[0]);
       let mariam = message.author.username
-message.channel.send(`**:moneybag: | ${message.author.username}, has transferrerd ` + "`" + args[0]+ "`" + "$" +"to " + `<@${defineduser.id}>**`)
+message.channel.send(`${msg.author} has tranfered \`$${args[1]}\` to ${men}.`)
 }
  
 });
