@@ -39,7 +39,6 @@ if (message.content.startsWith("t!profile")) { // الامر
                       //  ava.src = buf;
 
     fs.readFile(__dirname + '/images_profile/profile.png', function(err, picture) { //مكان الصوره 
-      if (err) throw err
       var img = new Image
         		var url = message.author.avatarURL; //افتار صورتك
 		url = url.substring(0, url.indexOf('?'));
