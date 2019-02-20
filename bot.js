@@ -40,7 +40,7 @@ var po = "النقاط"
 var lev = "الفل"
 
 
-cclient.on("message", (message) => {
+client.on("message", (message) => {
   let men = message.mentions.users.first()
  
   if (message.author.bot) return;
