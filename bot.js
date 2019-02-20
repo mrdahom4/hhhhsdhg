@@ -54,9 +54,9 @@ if (message.content.startsWith(prefix + 'credit')) {
   };
   }
   if(men) {
-message.channel.send(`**${message.author.username}, your :credit_card: balance is \`\`${userData.credits}\`\`.**`)
+message.channel.send(`** Your 💳 balance is: **\`$${credits}\``)
 } else {
-  message.channel.send(` your :credit_card: balance is \`\`${userData.credits}\`\`.**`)
+  message.channel.send(`** Your 💳 balance is: **\`$${credits}\``)
 }
 }
  
