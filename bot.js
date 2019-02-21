@@ -56,7 +56,7 @@ client.on('message',async message => {
   fs.writeFile(path, JSON.stringify(credits, null, 5), function(err) {if(err) console.log(err)});
  
  
-  if(message.content.startsWith(prefix + "credit")) {
+  if(message.content.startsWith(prefix + "credit"|| prefix + "credits")) {
   if(args[0] !== `${prefix}credit` && args[0] !== `${prefix}credits`) return;
  
   if(args[2]) {
@@ -121,7 +121,7 @@ client.on('message',async message => {
       credits[author].credits += (+daily);
       fs.writeFile(path, JSON.stringify(credits, null, 5), function(err) {if(err) console.log(err)});
  
-      message.channel.send(`:atm:  |  ${mention.username} , you received your :yen: \`${daily}$\` daily credits!`);
+      message.channel.send(`**:atm:  |  ${mention.username} , you received your :yen: \`${daily}$\` daily credits!**`);
     }
     cool.unshift(message.author.id);
  
