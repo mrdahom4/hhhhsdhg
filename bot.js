@@ -35,11 +35,6 @@ client.on('ready', () => {
   console.log('')
 });
 
-var mo = "الفلوس"
-var po = "النقاط"
-var lev = "الفل"
-
-
 client.on("message", (message) => {
   let men = message.mentions.users.first()
  
@@ -54,9 +49,9 @@ if (message.content.startsWith(prefix + 'credit')) {
   };
   }
   if(men) {
-message.channel.send(`** Your 💳 balance is: **\`$${credits}\``)
+message.channel.send(`**${message.author.username}, your :credit_card: balance is \`\`${userData.credits}\`\`.**`)
 } else {
-  message.channel.send(`** Your 💳 balance is: **\`$${credits}\``)
+  message.channel.send(` your :credit_card: balance is \`\`${userData.credits}\`\`.**`)
 }
 }
  
@@ -100,7 +95,7 @@ if (err) console.error(err);
       profile[defineduser.id].credits += (+args[0]);
       profile[sender.id].credits += (-args[0]);
       let mariam = message.author.username
-message.channel.send(`**:moneybag: | ${message.author.username}, has transferrerd ` +"`" + args[0]+ "`" + "to" `<@${defineduser.id}>**`)
+message.channel.send(`**:moneybag: | ${message.author.username}, has transferrerd ` + args[0] +  `<@${defineduser.id}>**`)
 }
  
 });
