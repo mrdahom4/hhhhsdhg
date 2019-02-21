@@ -102,7 +102,7 @@ client.on('message',async message => {
  
       var number = `${one}${two}${three}${four}`;
  
-      message.channel.send(`**\`${number}\`, قم بكتابة الرقم للأستمرار**`).then(async m => {
+      message.channel.send(`**Write down this number for the transmission process : \`${number}\`**`).then(async m => {
         message.channel.awaitMessages(msg => msg.author.id === message.author.id, {max: 1, time: 20000, errors: ['time']}).then(collected => {
           if(collected.first().content === number) {
             m.delete();
@@ -110,7 +110,7 @@ client.on('message',async message => {
             credits[mentionn.id].credits += (+daily);
             fs.writeFile(path, JSON.stringify(credits, null, 5), function(err) {if(err) console.log(err)});
  
-          message.channel.send(`****${mention.username} you collect your \`${daily}\` :dollar: daily pounds**`);  
+          message.channel.send(`**${mention.username} you collect your \`${daily}\` :dollar: daily pounds**`);  
           }
           if(collected.first().content !== number) {
             return m.delete();
