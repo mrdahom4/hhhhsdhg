@@ -71,24 +71,24 @@ client.on('message',async message => {
  
     var number = `${one}${two}${three}${four}`;
    
-    message.channel.send(`** \`${number}\` , أكتب الرقم للأستمرار**`).then(m => {
+    message.channel.send(`** type these numbers to confirm : \`${number}\`**`).then(m => {
       message.channel.awaitMessages(m => m.author.id === message.author.id, {max: 1, time: 10000}).then(c => {
         if(c.first().content === number) {
           m.delete();
-          message.channel.send(`**:atm: | ${message.author.username} , has transferrerd \`${balance}$\` to ${mention} **`);
+          message.channel.send(`**:moneybag: | ${message.author.username} , has transferrerd \`${balance}$\` to ${mention} **`);
           credits[author].credits += (-balance);
           credits[mention.id].credits += (+balance);
           fs.writeFile(path, JSON.stringify(credits, null, 5), function(err) {if(err) console.log(err)});
         } else if(c.first().content !== number) {
           m.delete();
-          message.channel.send(`** تم الغاء الإرسال**`);
+          message.channel.send(`**${message.author.username} , The transmission has been canceled**`);
         }
       });
     });
   }
   if(!args[2]) {
     if(mention.bot) return message.channel.send(`** ${message.content.split(' ')[1]} لم يتم العثور على**`);
-    message.channel.send(`**${mention.username} , your :credit_card: balance is \` ${credits[mention.id].credits}$\`** `);
+    message.channel.send(`**${mention.username} , your :credit_card: balance is \` ${credits[mention.id].credits}$\`.**`);
   }
  
   }
@@ -112,7 +112,7 @@ client.on('message',async message => {
  
           message.channel.send(`****${mention.username} you collect your \`${daily}\` :dollar: daily pounds**`);  
           }
-          if(collected.first().content !== 24584185) {
+          if(collected.first().content !== number) {
             return m.delete();
           }
         });
@@ -121,7 +121,7 @@ client.on('message',async message => {
       credits[author].credits += (+daily);
       fs.writeFile(path, JSON.stringify(credits, null, 5), function(err) {if(err) console.log(err)});
  
-      message.channel.send(`**${mention.username} You have been given the money , \`${daily}$\` **`);
+      message.channel.send(`:atm:  |  ${mention.username} , you received your :yen: \`${daily}$\` daily credits!`);
     }
     cool.unshift(message.author.id);
  
@@ -133,7 +133,6 @@ client.on('message',async message => {
   }
 });
 //الحقوق محفوظه لده لورنس 
-
 
 
 
