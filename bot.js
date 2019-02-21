@@ -88,12 +88,12 @@ client.on('message',async message => {
   }
   if(!args[2]) {
     if(mention.bot) return message.channel.send(`** ${message.content.split(' ')[1]} لم يتم العثور على**`);
-    message.channel.send(`**${mention.username}, your :credit_card: balance is \` ${credits[mention.id].credits}$\`** `);
+    message.channel.send(`**${mention.username} , your :credit_card: balance is \` ${credits[mention.id].credits}$\`** `);
   }
  
   }
   if(message.content.startsWith(prefix + "daily")) {
-    if(cool.includes(message.author.id)) return message.channel.send(`** يجب عليك انتظار  يوم لأخذ المبلغ مرة اخرى**`);
+    if(cool.includes(message.author.id)) return message.channel.send(`**:stopwatch: |${mention.username} your daily :yen: credits refreshes ${moment().endOf('day').fromNow()}**`);
     if(mentionn) {
       var one = Math.floor(Math.random() * 9) + 1;
       var two = Math.floor(Math.random() * 9) + 1;
@@ -110,9 +110,9 @@ client.on('message',async message => {
             credits[mentionn.id].credits += (+daily);
             fs.writeFile(path, JSON.stringify(credits, null, 5), function(err) {if(err) console.log(err)});
  
-          message.channel.send(`** \`${daily}\`, تم تسليم المبلغ**`);  
+          message.channel.send(`****${mention.username} you collect your \`${daily}\` :dollar: daily pounds**`);  
           }
-          if(collected.first().content !== number) {
+          if(collected.first().content !== 24584185) {
             return m.delete();
           }
         });
@@ -121,13 +121,13 @@ client.on('message',async message => {
       credits[author].credits += (+daily);
       fs.writeFile(path, JSON.stringify(credits, null, 5), function(err) {if(err) console.log(err)});
  
-      message.channel.send(`** \`${daily}\`, تم اعطائك المبلغ**`);
+      message.channel.send(`** \`${daily}\`, **${mention.username} You have been given the money **`);
     }
     cool.unshift(message.author.id);
  
     setTimeout(() => {
       cool.shift(message.author.id);
-      message.author.send("**:atm: | \`Daily\`, يمكنك الحصول على الكردت المجانية الان**").catch();
+      message.author.send("**:atm: | You can get free credits now , \`Daily\`**").catch();
     }, ms("1d"));
 
   }
