@@ -35,7 +35,7 @@ client.on('ready', () => {
   console.log('')
 });
 
-  const fs = require('fs'); // npm i fs
+
 const ms = require('ms'); // npm i ms
 const cool = [];
 client.on('message',async message => {
