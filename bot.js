@@ -78,13 +78,13 @@ if (message.content.startsWith("#p")) { // الامر
         ctx.font = "regular 11px Cairo" // نوع الخط وحجمه
         ctx.fillStyle = "#9f9f9f" // لون الخط
         ctx.fillText(`${message.author.username}`, 140, 137)
-        ctx.fillText(`${mo}  `, 143, 219) //money
-        ctx.fillText(`${po}`, 120, 202) // النقاط
+        ctx.fillText(`${credit}  `, 143, 219) //money
+        ctx.fillText(`${point}`, 120, 202) // النقاط
 
         //Level
         ctx.font = "regular 21px Cairo"
         ctx.fillStyle = "#ffffff"
-        ctx.fillText(`${lev}`, 47, 255) //لفل
+        ctx.fillText(`${rep}`, 47, 255) //لفل
 
         ctx.save()
         
