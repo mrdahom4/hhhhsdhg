@@ -1,7 +1,7 @@
 const Discord = require("discord.js"); 
 const client = new Discord.Client();
 const bot = new Discord.Client({disableEveryone: true});
-const Canvas = require('canvas') 
+const canvas = require('canvas') 
 const fs = module.require("fs"); 
 const r1 = require('snekfetch'); 
 const prefix = '#'
