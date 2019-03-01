@@ -36,198 +36,151 @@ client.on('ready', () => {
 });
 
 
-const ms = require('ms'); // npm i ms
-const cool = [];
-client.on('message',async message => {
-  if(message.author.bot) return;
-  if(message.channel.type === 'dm') return;
- 
-  const args = message.content.split(' ');
-  const credits = require('./credits.json');
-  const path = './credits.json';
-  const mention = message.mentions.users.first() || client.users.get(args[1]) || message.author;
-  const mentionn = message.mentions.users.first() || client.users.get(args[1]);
-  const author = message.author.id;
-  const balance = args[2];
-  const daily = Math.floor(Math.random() * 350) + 10;
- 
-  if(!credits[author]) credits[author] = {credits: 50};
-  if(!credits[mention.id]) credits[mention.id] = {credits: 50};
-  fs.writeFile(path, JSON.stringify(credits, null, 5), function(err) {if(err) console.log(err)});
- 
- 
-  if(message.content.startsWith(prefix + "credit"|| prefix + "credits")) {
-  if(args[0] !== `${prefix}credit` && args[0] !== `${prefix}credits`) return;
- 
-  if(args[2]) {
-    if(isNaN(args[2])) return message.channel.send('** هذه الخانة يجب ان تتكون من ارقام وليس احرف.**');
-    if(mention.bot) return message.channel.send(`** ${message.content.split(' ')[1]} لم يتم العثور على**`);
-    if(mention.id === message.author.id) return message.channel.send('** لا يمكنك تحويل كردت لنفسك**');
-    if(credits[author].credits < balance) return message.channel.send('** أنت لا تملك هذا القدر من الكردت**');
-    var one = Math.floor(Math.random() * 9) + 1;
-    var two = Math.floor(Math.random() * 9) + 1;
-    var three = Math.floor(Math.random() * 9) + 1;
-    var four = Math.floor(Math.random() * 9) + 1;
- 
-    var number = `${one}${two}${three}${four}`;
+const Canvas = require('canvas') 
+const fs = module.require("fs"); 
+const r1 = require('snekfetch'); 
+
+
+
+
+
+client.on('message', message => {
+
+if (message.content.startsWith("#p")) { // الامر
+ let canvas = new Canvas(300, 300) //حجم الصوره الي هتظهر
+ let ctx = canvas.getContext('2d')
+    let Image = Canvas.Image
+    
    
-    message.channel.send(`** type these numbers to confirm : \`${number}\`**`).then(m => {
-      message.channel.awaitMessages(m => m.author.id === message.author.id, {max: 1, time: 10000}).then(c => {
-        if(c.first().content === number) {
-          m.delete();
-          message.channel.send(`**:moneybag: | ${message.author.username} , has transferrerd \`${balance}$\` to ${mention} **`);
-          credits[author].credits += (-balance);
-          credits[mention.id].credits += (+balance);
-          fs.writeFile(path, JSON.stringify(credits, null, 5), function(err) {if(err) console.log(err)});
-        } else if(c.first().content !== number) {
-          m.delete();
-          message.channel.send(`**${message.author.username} , The transmission has been canceled**`);
-        }
-      });
-    });
-  }
-  if(!args[2]) {
-    if(mention.bot) return message.channel.send(`** ${message.content.split(' ')[1]} لم يتم العثور على**`);
-    message.channel.send(`**${mention.username} , your :credit_card: balance is \` ${credits[mention.id].credits}$\`.**`);
-  }
- 
-  }
-  if(message.content.startsWith(prefix + "daily")) {
-    if(cool.includes(message.author.id)) return message.channel.send(`**:stopwatch: |${mention.username} your daily :yen: credits refreshes ${moment().endOf('day').fromNow()}**`);
-    if(mentionn) {
-      var one = Math.floor(Math.random() * 9) + 1;
-      var two = Math.floor(Math.random() * 9) + 1;
-      var three = Math.floor(Math.random() * 9) + 1;
-      var four = Math.floor(Math.random() * 9) + 1;
- 
-      var number = `${one}${two}${three}${four}`;
- 
-      message.channel.send(`**Write down this number for the transmission process : \`${number}\`**`).then(async m => {
-        message.channel.awaitMessages(msg => msg.author.id === message.author.id, {max: 1, time: 20000, errors: ['time']}).then(collected => {
-          if(collected.first().content === number) {
-            m.delete();
-            collected.first().delete();
-            credits[mentionn.id].credits += (+daily);
-            fs.writeFile(path, JSON.stringify(credits, null, 5), function(err) {if(err) console.log(err)});
- 
-          message.channel.send(`**${mention.username} you collect your \`${daily}\` :dollar: daily pounds**`);  
-          }
-          if(collected.first().content !== number) {
-            return m.delete();
-          }
-        });
-      });
-    } else if(!mentionn) {
-      credits[author].credits += (+daily);
-      fs.writeFile(path, JSON.stringify(credits, null, 5), function(err) {if(err) console.log(err)});
- 
-      message.channel.send(`**:atm:  |  ${mention.username} , you received your :yen: \`${daily}$\` daily credits!**`);
-    }
-    cool.unshift(message.author.id);
- 
-    setTimeout(() => {
-      cool.shift(message.author.id);
-      message.author.send("**:atm: | You can get free credits now , \`Daily\`**").catch();
-    }, ms("1d"));
+                      //  ava.src = buf;
 
-  }
-});
-//الحقوق محفوظه لده لورنس 
+    fs.readFile(__dirname + '/images_profile/profile.png', function(err, picture) { //مكان الصوره 
+      if (err) throw err
+      var img = new Image
+        		var url = message.author.avatarURL; //افتار صورتك
+		url = url.substring(0, url.indexOf('?'));
 
+		r1.get(url).then(res => {
+			var dataURL = res.body.toString('base64');
+			dataURL = 'data:image/png;base64,' + dataURL;
+			img.onload = function() {
 
-client.on('message',async message => {
-  if(message.author.bot) return;
-  if(message.channel.type === 'dm') return;
- 
-  const args = message.content.split(' ');
-  const credits = require('./credits.json');
-  const path = './credits.json';
-  const mention = message.mentions.users.first() || client.users.get(args[1]) || message.author;
-  const mentionn = message.mentions.users.first() || client.users.get(args[1]);
-  const author = message.author.id;
-  const balance = args[2];
-  const daily = Math.floor(Math.random() * 350) + 10;
- 
-  if(!credits[author]) credits[author] = {credits: 56452664};
-  if(!credits[mention.id]) credits[mention.id] = {credits: 56452664};
-  fs.writeFile(path, JSON.stringify(credits, null, 5), function(err) {if(err) console.log(err)});
- 
- 
-  if(message.content.startsWith(prefix + "lor"|| prefix + "lo")) {
-  if(args[0] !== `${prefix}credit` && args[0] !== `${prefix}credits`) return;
- 
-  if(args[2]) {
-    if(isNaN(args[2])) return message.channel.send('** هذه الخانة يجب ان تتكون من ارقام وليس احرف.**');
-    if(mention.bot) return message.channel.send(`** ${message.content.split(' ')[1]} لم يتم العثور على**`);
-    if(mention.id === message.author.id) return message.channel.send('** لا يمكنك تحويل كردت لنفسك**');
-    if(credits[author].credits < balance) return message.channel.send('** أنت لا تملك هذا القدر من الكردت**');
-    var one = Math.floor(Math.random() * 9) + 1;
-    var two = Math.floor(Math.random() * 9) + 1;
-    var three = Math.floor(Math.random() * 9) + 1;
-    var four = Math.floor(Math.random() * 9) + 1;
- 
-    var number = `${one}${two}${three}${four}`;
+				ctx.save();
+    		ctx.beginPath();
+    		ctx.arc(54, 103, 47, 0, Math.PI * 2, true); // احدثيات الدائره
+		    ctx.closePath();
+		    ctx.clip();
+		    ctx.drawImage(img, 8, 57, 92, 92); // الصوره
+		    ctx.restore();
+			}
+			img.src = dataURL;
+		});
+		
+      img.onload = () => {
+        ctx.drawImage(img, 1, 1, 300, 300)
+     //   ctx.drawImage(message.author.avatarURL, 152, 27, 95, 95);
+        ctx.font = "regular 11px Cairo" // نوع الخط وحجمه
+        ctx.fillStyle = "#9f9f9f" // لون الخط
+        ctx.fillText(`${message.author.username}`, 140, 137)
+        ctx.fillText(`${mo}  `, 143, 219) //money
+        ctx.fillText(`${po}`, 120, 202) // النقاط
+
+        //Level
+        ctx.font = "regular 21px Cairo"
+        ctx.fillStyle = "#ffffff"
+        ctx.fillText(`${lev}`, 47, 255) //لفل
+
+        ctx.save()
+        
+      }
+      img.src = picture
+			
+    })
+		
    
-    message.channel.send(`** type these numbers to confirm : \`${number}\`**`).then(m => {
-      message.channel.awaitMessages(m => m.author.id === message.author.id, {max: 1, time: 10000}).then(c => {
-        if(c.first().content === number) {
-          m.delete();
-          message.channel.send(`**:moneybag: | ${message.author.username} , has transferrerd \`${balance}$\` to ${mention} **`);
-          credits[author].credits += (-balance);
-          credits[mention.id].credits += (+balance);
-          fs.writeFile(path, JSON.stringify(credits, null, 5), function(err) {if(err) console.log(err)});
-        } else if(c.first().content !== number) {
-          m.delete();
-          message.channel.send(`**${message.author.username} , The transmission has been canceled**`);
-        }
-      });
-    });
-  }
-  if(!args[2]) {
-    if(mention.bot) return message.channel.send(`** ${message.content.split(' ')[1]} لم يتم العثور على**`);
-    message.channel.send(`**${mention.username} , your :credit_card: balance is \` ${credits[mention.id].credits}$\`.**`);
-  }
- 
-  }
-  if(message.content.startsWith(prefix + "dlor")) {
-    if(cool.includes(message.author.id)) return message.channel.send(`**:stopwatch: |${mention.username} your daily :yen: credits refreshes ${moment().endOf('day').fromNow()}**`);
-    if(mentionn) {
-      var one = Math.floor(Math.random() * 9) + 1;
-      var two = Math.floor(Math.random() * 9) + 1;
-      var three = Math.floor(Math.random() * 9) + 1;
-      var four = Math.floor(Math.random() * 9) + 1;
- 
-      var number = `${one}${two}${three}${four}`;
- 
-      message.channel.send(`**Write down this number for the transmission process : \`${number}\`**`).then(async m => {
-        message.channel.awaitMessages(msg => msg.author.id === message.author.id, {max: 1, time: 20000, errors: ['time']}).then(collected => {
-          if(collected.first().content === number) {
-            m.delete();
-            collected.first().delete();
-            credits[mentionn.id].credits += (+daily);
-            fs.writeFile(path, JSON.stringify(credits, null, 5), function(err) {if(err) console.log(err)});
- 
-          message.channel.send(`**${mention.username} you collect your \`${daily}\` :dollar: daily pounds**`);  
-          }
-          if(collected.first().content !== number) {
-            return m.delete();
-          }
-        });
-      });
-    } else if(!mentionn) {
-      credits[author].credits += (+daily);
-      fs.writeFile(path, JSON.stringify(credits, null, 5), function(err) {if(err) console.log(err)});
- 
-      message.channel.send(`**:atm:  |  ${mention.username} , you received your :yen: \`${daily}$\` daily credits!**`);
-    }
-    cool.unshift(message.author.id);
- 
-    setTimeout(() => {
-      cool.shift(message.author.id);
-      message.author.send("**:atm: | You can get free credits now , \`Daily\`**").catch();
-    }, ms("1d"));
 
-  }
+    
+
+    setTimeout(function() {
+      fs.readFile(__dirname + '/images_profile/diamond_prof_bg.png', function(err, picture) {
+        if (err) throw err
+        var img = new Image
+        img.onload = () => {
+          ctx.drawImage(img, -1, -1, 0, 0)
+        }
+        img.src = picture
+        let inventoryPicture = canvas.toDataURL()
+        let data = inventoryPicture.replace(/^data:image\/\w+;base64,/, "")
+        let buf = new Buffer(data, 'base64')
+      fs.writeFile(`image.png`, buf)
+      
+        message.channel.send("", {
+          file: `image.png` 
+        })
+      })
+    }, 1000)
+
+
+    function roundedImage(x, y, width, height, radius) {
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.lineTo(x + width - radius, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+      ctx.lineTo(x + width, y + height - radius);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+      ctx.lineTo(x + radius, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+      ctx.lineTo(x, y + radius);
+      ctx.quadraticCurveTo(x, y, x + radius, y);
+      ctx.closePath();
+    }
+
+    function wrapText(context, text, x, y, maxWidth, lineHeight) {
+
+      var words = text.split(' '),
+        line = '',
+        lineCount = 0,
+        i,
+        test,
+        metrics;
+
+      for (i = 0; i < words.length; i++) {
+        test = words[i];
+        metrics = context.measureText(test);
+        while (metrics.width > maxWidth) {
+
+          test = test.substring(0, test.length - 1);
+          metrics = context.measureText(test);
+        }
+        if (words[i] != test) {
+          words.splice(i + 1, 0, words[i].substr(test.length))
+          words[i] = test;
+        }
+
+        test = line + words[i] + ' ';
+        metrics = context.measureText(test);
+
+        if (metrics.width > maxWidth && i > 0) {
+          context.fillText(line, x, y);
+          line = words[i] + ' ';
+          y += lineHeight;
+          lineCount++;
+        } else {
+          line = test;
+        }
+      }
+
+      ctx.fillText(line, x, y);
+    }
+  
+
+
+
+};
+
+
+
+
 });
 
 client.login(process.env.BOT_TOKEN);
