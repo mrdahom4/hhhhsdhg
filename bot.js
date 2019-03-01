@@ -43,139 +43,108 @@ client.on('ready', () => {
 client.on('message', message => {
 
 if (message.content.startsWith("#p")) { // الامر
- let canvas = new Canvas(300, 300) //حجم الصوره الي هتظهر
- let ctx = canvas.getContext('2d')
-    let Image = Canvas.Image
-    
-   
-                      //  ava.src = buf;
+    let getvalueof = msg.mentions.users.first() || msg.author;
 
-    fs.readFile(__dirname + '/images_profile/profile.png', function(err, picture) { //مكان الصوره 
-      if (err) throw err
-      var img = new Image
-        		var url = message.author.avatarURL; //افتار صورتك
-		url = url.substring(0, url.indexOf('?'));
+    let res = await SQLite.get(`SELECT * FROM profileSystem WHERE id = ${getvalueof.id}`)
 
-		r1.get(url).then(res => {
-			var dataURL = res.body.toString('base64');
-			dataURL = 'data:image/png;base64,' + dataURL;
-			img.onload = function() {
+    if(!res) SQLite.run(`INSERT INTO profileSystem VALUES ('${msg.author.id}', 200, 0, ${xp}, 0, 0, 0, "Type ${prefix}setinfo to set info", "{}", "{wallSrc: '/walls/p2.png'}"`)
 
-				ctx.save();
-    		ctx.beginPath();
-    		ctx.arc(54, 103, 47, 0, Math.PI * 2, true); // احدثيات الدائره
-		    ctx.closePath();
-		    ctx.clip();
-		    ctx.drawImage(img, 8, 57, 92, 92); // الصوره
-		    ctx.restore();
-			}
-			img.src = dataURL;
-		});
-		
-      img.onload = () => {
-        ctx.drawImage(img, 1, 1, 300, 300)
-     //   ctx.drawImage(message.author.avatarURL, 152, 27, 95, 95);
-        ctx.font = "regular 11px Cairo" // نوع الخط وحجمه
-        ctx.fillStyle = "#9f9f9f" // لون الخط
-        ctx.fillText(`${message.author.username}`, 140, 137)
-        ctx.fillText(`${credit}  `, 143, 219) //money
-        ctx.fillText(`${point}`, 120, 202) // النقاط
+
+    let Image = Canvas.Image,
+    canvas = Canvas.createCanvas(300, 300),
+    ctx = canvas.getContext('2d');
+fs.readFile(__dirname + `/${JSON.parse(res.profileData).wallSrc}`, function (err, Background) {
+  fs.readFile(__dirname + `/walls/p1.png`, function (err, Background) {
+  if (err) return console.log(err);
+  let BG = Canvas.Image;
+  let ground = new Image;
+  ground.src = Background;
+  ctx.drawImage(ground, 0, 0, 297, 305);
+});
+  if (err) return console.log(err);
+  let BG = Canvas.Image;
+  let ground = new Image;
+  ground.src = Background;
+  ctx.drawImage(ground, 0, 0, 300, 305);
+});
+
+
+let url = getvalueof.displayAvatarURL.endsWith(".webp") ? getvalueof.displayAvatarURL.slice(5, -20) + ".png" : getvalueof.displayAvatarURL;
+Jimp.read(url, (err, ava) => {
+    if (err) return console.log(err);
+    ava.getBuffer(Jimp.MIME_PNG, async (err, buf) => {
+        if (err) return console.log(err);
+
+
+        //Avatar
+       let Avatar = Canvas.Image;
+        let ava = new Avatar;
+        ava.src = buf;
+     ctx.drawImage(ava, 8, 43, 80, 85); // احداثيات صورتك
+
+        //ur name
+        ctx.font = 'bold 16px profile'; // حجم الخط و نوعه
+        ctx.fontSize = '40px'; // عرض الخط
+        ctx.fillStyle = "#FFFFFF"; // لون الخط
+        ctx.textAlign = "left"; // محاذا ة النص
+        ctx.fillText(`${getvalueof.username}`, 100, 125) // احداثيات اسمك
+
+         //bord
+         let leaderboard = await SQLite.all(`SELECT * FROM profileSystem ORDER BY xp DESC, credits DESC`);
+        ctx.font = "regular 12px profile" // نوع الخط وحجمه
+        ctx.fontSize = '50px'; // عرض الخط
+        ctx.fillStyle = "#FFFFFF" // لون الخط
+        ctx.textAlign = "left"; // محاذا ة
+        for(var i = 0;i<leaderboard.length;i++) {
+          if(leaderboard[i].id == getvalueof.id) {
+            ctx.fillText(`#${i+1}`, 173, 200)
+          }
+        }
+
+
+        //credit
+        ctx.font = "bold 10px profile" // نوع الخط وحجمه
+        ctx.fontSize = '10px'; // عرض الخط
+        ctx.fillStyle = '#FFFFFF' // لون الخط
+        ctx.textAlign = "left"; // محاذا ة النص
+        ctx.fillText(`$ ${res.credits}`, 156, 163) // احداثيات المصاري
+
+        //poits
+        ctx.font = "bold 13px profile" // ن
+        ctx.fontSize = '10px'; // عرض الخطوع الخط وحجمه
+        ctx.fillStyle = "#FFFFFF" // لون الخط
+        ctx.textAlign = "left"; // محاذا ة النص
+        ctx.fillText(`${res.xp}`, 173, 182) // احداثيات النقاط
 
         //Level
-        ctx.font = "regular 21px Cairo"
-        ctx.fillStyle = "#ffffff"
-        ctx.fillText(`${rep}`, 47, 255) //لفل
+        ctx.font = "bold 27px profile" // نوع الخط و حجمه
+        ctx.fontSize = '50px'; // عرض الخط
+        ctx.fillStyle = "#FFFFFF" // لون الخط
+        ctx.textAlign = "left"; // محاذا ة النص
+        ctx.fillText(`${res.level}`, 30, 200) // احداثيات اللفل
 
-        ctx.save()
-        
-      }
-      img.src = picture
-			
-    })
-		
-   
+        //info
+        ctx.font = "blod 13px profile" // ن
+        ctx.fontSize = '10px'; // عرض الخطوع الخط وحجمه
+        ctx.fillStyle = "#FFFFFF" // لون الخط
+        ctx.textAlign = "left"; // محاذا ة النص
+        ctx.fillText(`${res.info}`, 118, 40) // احداثيات النقاط
 
-    
+        // REP
+        ctx.font = "bold 27px profile";
+        ctx.fontSize = "100px";
+        ctx.fillStyle = "#FFFFFF";
+        ctx.textAlign = "left";
+        ctx.fillText(`+${res.rep}`, 18,270)
 
-    setTimeout(function() {
-      fs.readFile(__dirname + '/images_profile/diamond_prof_bg.png', function(err, picture) {
-        if (err) throw err
-        var img = new Image
-        img.onload = () => {
-          ctx.drawImage(img, -1, -1, 0, 0)
-        }
-        img.src = picture
-        let inventoryPicture = canvas.toDataURL()
-        let data = inventoryPicture.replace(/^data:image\/\w+;base64,/, "")
-        let buf = new Buffer(data, 'base64')
-      fs.writeFile(`image.png`, buf)
-      
-        message.channel.send("", {
-          file: `image.png` 
-        })
-      })
-    }, 1000)
+msg.channel.send("**:white_check_mark: `Show Profile` ➤**" + `${msg.author}`, {
+file: canvas.toBuffer()
+})
+})
+})
 
 
-    function roundedImage(x, y, width, height, radius) {
-      ctx.beginPath();
-      ctx.moveTo(x + radius, y);
-      ctx.lineTo(x + width - radius, y);
-      ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-      ctx.lineTo(x + width, y + height - radius);
-      ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-      ctx.lineTo(x + radius, y + height);
-      ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-      ctx.lineTo(x, y + radius);
-      ctx.quadraticCurveTo(x, y, x + radius, y);
-      ctx.closePath();
-    }
-
-    function wrapText(context, text, x, y, maxWidth, lineHeight) {
-
-      var words = text.split(' '),
-        line = '',
-        lineCount = 0,
-        i,
-        test,
-        metrics;
-
-      for (i = 0; i < words.length; i++) {
-        test = words[i];
-        metrics = context.measureText(test);
-        while (metrics.width > maxWidth) {
-
-          test = test.substring(0, test.length - 1);
-          metrics = context.measureText(test);
-        }
-        if (words[i] != test) {
-          words.splice(i + 1, 0, words[i].substr(test.length))
-          words[i] = test;
-        }
-
-        test = line + words[i] + ' ';
-        metrics = context.measureText(test);
-
-        if (metrics.width > maxWidth && i > 0) {
-          context.fillText(line, x, y);
-          line = words[i] + ' ';
-          y += lineHeight;
-          lineCount++;
-        } else {
-          line = test;
-        }
-      }
-
-      ctx.fillText(line, x, y);
-    }
-  
-
-
-
-};
-
-
-
+  }
 
 });
 
