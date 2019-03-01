@@ -36,10 +36,6 @@ client.on('ready', () => {
 });
 
 
-const Canvas = require('canvas') 
-const fs = module.require("fs"); 
-const r1 = require('snekfetch'); 
-
 
 
 
